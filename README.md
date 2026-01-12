@@ -1,33 +1,87 @@
 # Event App — Flutter + Firebase
 
-A mobile event management application built using **Flutter** with **Firebase** as the backend, focusing on real-time data handling, user interaction, and role-based access.
+A complete event management application built using **Flutter** and **Firebase**. This app allows users to discover events, register for them, manage their profile, and provides admin capabilities for event creation.
 
-## Features
+## ✨ Features
 
-- User **login & signup** using Firebase Authentication
-- Browse events with **date, location, and detailed descriptions**
-- **Event registration / RSVP** system
-- **Bookmark events** for later reference
-- **Profile screen** showing registered and bookmarked events
-- **Admin role** to add and manage events
-- **Real-time updates** powered by Cloud Firestore
+### 🔍 Event Discovery
+- **Search & Filter**: Search events by title or location. Filter events by categories like **Tech, Music, Sports, Art, and General**.
+- **Detailed View**: View comprehensive event details including date, time, location, and description.
+- **Location Support**: Open event locations directly in Google Maps.
 
-## Tech Stack
+### 👤 User Interaction
+- **Authentication**: Secure Login and Signup powered by **Firebase Authentication**.
+- **RSVP/Registration**: Simple one-tap registration for events.
+- **Bookmarks**: Save interesting events to your personal bookmark list.
+- **Social Sharing**: Share event details with friends via other apps.
 
-- Flutter (Dart)
-- Firebase Authentication
-- Cloud Firestore
+### ⚙️ Account Management
+- **Profile**: View your details, Admin/User role status.
+- **My Registrations**: Track all events you have signed up for.
+- **Saved Events**: Access your bookmarked events.
+- **Customization**: Toggle between **Light and Dark themes**.
+- **Edit Profile**: Update your display name.
 
-## Screens
+### 🛡️ Admin Panel
+- **Role-based Access**: Admins have exclusive access to manage events.
+- **Event Management**: Create new events with titles, descriptions, dates, locations, and categories.
+- **Delete Events**: Remove cancelled or old events.
 
-1. Login / Signup
-2. Home (Event List)
-3. Event Details
-4. Profile
-5. Admin Panel (Add Events)
+## 🛠️ Tech Stack
 
-## Status
+- **Frontend**: Flutter (Dart)
+- **Backend**: Firebase (Authentication, Cloud Firestore)
+- **State Management**: Provider
+- **Plugins Details**:
+    - `firebase_auth` & `cloud_firestore`: Backend services.
+    - `provider`: State management.
+    - `shared_preferences`: Local storage for persistence.
+    - `url_launcher`: Opening maps.
+    - `share_plus`: Content sharing.
+    - `intl`: Date formatting.
 
-- Actively developed
-- Tested on a real Android device
-- Built as a personal project to demonstrate Flutter + Firebase skills
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK installed
+- Firebase project setup with `google-services.json` (Android) / `GoogleService-Info.plist` (iOS) configured.
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/event_app.git
+   cd event_app
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Run the App**
+   ```bash
+   flutter run
+   ```
+
+## 📸 Screen Overview
+
+| Home Screen | Event Details | Profile |
+|:-----------:|:-------------:|:-------:|
+| *[Event List with Search & Chips]* | *[Event Info & Register Button]* | *[User Info, Dark Mode, Lists]* |
+
+---
+
+## 👩‍💻 Author
+
+**Prerna Kale**
+*   B.Tech Computer Engineering
+*   Building AI-driven solutions for real-world problems.
+
+---
+
+## 🏷️ License
+This project is for academic and demonstration purposes.
+
+---
+*Built with ❤️ using Flutter*
