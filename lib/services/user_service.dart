@@ -13,4 +13,18 @@ class UserService {
 
     return doc.data()?['role'] == 'admin';
   }
+  Future<void> updateDisplayName(String name) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Update Firebase Auth profile
+      await user.updateDisplayName(name);
+      
+      // Optionally update Firestore user document if you store redundant data
+      /*
+      await FirebaseFirestore.instance .collection('users').doc(user.uid).update({
+        'displayName': name,
+      });
+      */
+    }
+  }
 }

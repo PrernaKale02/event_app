@@ -1,44 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/event.dart';
+import '../services/firestore_service.dart';
 
-class AdminScreen extends StatefulWidget {
-  const AdminScreen({super.key});
+class EditEventScreen extends StatefulWidget {
+  final Event event;
+  const EditEventScreen({super.key, required this.event});
 
   @override
-  State<AdminScreen> createState() => _AdminScreenState();
+  State<EditEventScreen> createState() => _EditEventScreenState();
 }
 
-class _AdminScreenState extends State<AdminScreen> {
-  String _monthName(int month) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return months[month - 1];
-  }
-
-  final _titleController = TextEditingController();
-  final _locationController = TextEditingController();
-  final _dateController = TextEditingController();
-  final _descriptionController = TextEditingController();
+class _EditEventScreenState extends State<EditEventScreen> {
+  late TextEditingController _titleController;
+  late TextEditingController _locationController;
+  late TextEditingController _dateController;
+  late TextEditingController _descriptionController;
 
   bool isLoading = false;
   String? error;
 
-  String _selectedCategory = 'General';
+  late String _selectedCategory;
   final List<String> _categories = ['General', 'Tech', 'Music', 'Sports', 'Art'];
 
-  Future<void> addEvent() async {
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.event.title);
+    _locationController = TextEditingController(text: widget.event.location);
+    _dateController = TextEditingController(text: widget.event.date);
+    _descriptionController = TextEditingController(text: widget.event.description);
+    _selectedCategory = widget.event.category;
+    if (!_categories.contains(_selectedCategory)) {
+        _selectedCategory = 'General';
+    }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _locationController.dispose();
+    _dateController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
+  }
+
+  Future<void> updateEvent() async {
     if (_titleController.text.isEmpty ||
         _locationController.text.isEmpty ||
         _dateController.text.isEmpty ||
@@ -49,48 +63,49 @@ class _AdminScreenState extends State<AdminScreen> {
       });
       return;
     }
+
     setState(() {
       isLoading = true;
       error = null;
     });
 
     try {
-      await FirebaseFirestore.instance.collection('events').add({
-        'title': _titleController.text.trim(),
-        'location': _locationController.text.trim(),
-        'date': _dateController.text.trim(),
-        'description': _descriptionController.text.trim(),
-        'category': _selectedCategory,
-      });
+      final updatedEvent = Event(
+        id: widget.event.id,
+        title: _titleController.text.trim(),
+        location: _locationController.text.trim(),
+        date: _dateController.text.trim(),
+        description: _descriptionController.text.trim(),
+        category: _selectedCategory,
+      );
+
+      await FirestoreService().updateEvent(updatedEvent);
 
       if (mounted) {
-        _titleController.clear();
-        _locationController.clear();
-        _dateController.clear();
-        _descriptionController.clear();
-        setState(() {
-          _selectedCategory = 'General';
-        });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Event added successfully')),
+          const SnackBar(content: Text('Event updated successfully')),
         );
-        Navigator.pop(context);
+        Navigator.pop(context, true); // Return true to indicate update
       }
     } catch (e) {
-      setState(() {
-        error = e.toString();
-      });
+      if (mounted) {
+        setState(() {
+          error = e.toString();
+        });
+      }
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Event'), centerTitle: true),
+      appBar: AppBar(title: const Text('Edit Event'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -111,7 +126,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 readOnly: true,
                 decoration: const InputDecoration(
                   labelText: 'Date',
-                  hintText: 'Select event date',
                   suffixIcon: Icon(Icons.calendar_today),
                 ),
                 onTap: () async {
@@ -133,7 +147,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
               const SizedBox(height: 12),
-              
+
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 decoration: const InputDecoration(labelText: 'Category'),
@@ -164,8 +178,8 @@ class _AdminScreenState extends State<AdminScreen> {
               isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                      onPressed: isLoading ? null : addEvent,
-                      child: const Text('Add Event'),
+                      onPressed: isLoading ? null : updateEvent,
+                      child: const Text('Update Event'),
                     ),
             ],
           ),
