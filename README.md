@@ -68,7 +68,7 @@ A complete event management application built using **Flutter** and **Firebase**
 
 | Home Screen | Event Details | Profile |
 |:-----------:|:-------------:|:-------:|
-| *[Event List with Search & Chips]* | *[Event Info & Register Button]* | *[User Info, Dark Mode, Lists]* |
+| <img src="home.jpeg" width="200" /> | <img src="event_detail.jpeg" width="200" /> | <img src="profile.jpeg" width="200" /> |
 
 ---
 
