@@ -50,7 +50,7 @@ A complete event management application built using **Flutter** and **Firebase**
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/event_app.git
+   git clone https://github.com/PrernaKale02/event_app
    cd event_app
    ```
 
